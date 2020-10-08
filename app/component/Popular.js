@@ -1,5 +1,23 @@
 import React from 'react'
 
+function LanguangesNav({ selected, onUpdateLanguage}) {
+    const languages = ['All', 'JavaScript', 'Ruby', 'Java', 'CSS', 'Python'];
+    return (
+        <ul className='flex-center'>
+            {languages.map((language) => (
+                <li key={language}>
+                    <button className='btn-clear nav-link'
+                    onClick={() => onUpdateLanguage(language)}
+                    style={language === selected ? {color: 'rgb(187, 46, 31)'} : null}>
+                        {language}
+                    </button>
+                </li>
+
+            ))}
+        </ul>
+    )
+}
+
 export default class Popular extends React.Component {
     constructor(props){
         super(props);
@@ -8,7 +26,7 @@ export default class Popular extends React.Component {
             selectedLanguage: 'All'
         };
         
-        this.updateLanguage.bind(this);
+        this.updateLanguage = this.updateLanguage.bind(this);
     }
 
     updateLanguage(selectedLanguage) {
@@ -18,20 +36,15 @@ export default class Popular extends React.Component {
     }
 
     render() {
-        const languages = ['All', 'JavaScript', 'Ruby', 'Java', 'CSS', 'Python'];
-        return (
-            <ul className='flex-center'>
-                {languages.map((language) => (
-                    <li key={language}>
-                        <button className='btn-clear nav-link'
-                        onClick={() => this.updateLanguage(language)}
-                        style={language === this.state.selectedLanguage ? {color: 'rgb(187, 46, 31)'} : null}>
-                            {language}
-                        </button>
-                    </li>
+        const { selectedLanguage } = this.state;
 
-                ))}
-            </ul>
+        return (
+            <React.Fragment>
+                <LanguangesNav
+                selected={selectedLanguage}
+                onUpdateLanguage={this.updateLanguage}
+                />
+            </React.Fragment>
         )
     }
 }
