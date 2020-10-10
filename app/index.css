@@ -52,6 +52,12 @@ li {
 .header-lg {
     font-size: 35px;
     font-weight: 300;
+    margin: 10px;
+}
+
+.header-sm {
+    font-size: 28px;
+    font-weight: 300;
     margin: 20px;
 }
 
@@ -110,4 +116,28 @@ li {
 
 .repo img {
     margin-bottom: 8px;
+}
+
+.instructions-container {
+    margin: 100px auto;
+}
+
+.container-sm {
+    width: 80%;
+    margin: 0 auto;
+}
+
+.battle-instructions {
+    padding: 0;
+    font-size: 25px;
+}
+
+.battle-instructions li {
+    flex: 1;
+    min-width: 300px;
+}
+
+.battle-instructions svg {
+    padding: 40px;
+    border-radius: 3px;
 }
