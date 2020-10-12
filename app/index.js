@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom'
 import './index.css'
 import Popular from './component/Popular'
 import Battle from './component/Battle'
-import { ThemeProvider } from './context/theme'
+import { ThemeProvider } from './contexts/theme'
 import Nav from './component/Nav'
 
 class App extends React.Component {
