@@ -71,7 +71,6 @@ export function fetchPopularRepos(language) {
     return fetch(endpoint)
         .then((res) => res.json())
         .then((data) => {
-            console.log("fetchPopularRepos -> data", data)
             if (!data.items){
                 throw new Error(data.message)
             }
