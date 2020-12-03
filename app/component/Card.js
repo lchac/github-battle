@@ -2,19 +2,19 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { ThemeConsumer } from '../contexts/theme'
 
-export default function Card ({header, subheader, avatar, href, name, children}) {
+export default function Card({ header, subheader, avatar, href, name, children }) {
     return (
         <ThemeConsumer>
-            {({ theme }) => (
+            {(theme) => (
                 <div className={`card bg-${theme}`}>
                     <h4 className='header-lg center-text'>
                         {header}
                     </h4>
-                    <img 
+                    <img
                         className='avatar'
                         src={avatar}
                         alt={`Avatar for ${name}`}
-                        />
+                    />
                     {subheader && (
                         <h4 className='center-text'>
                             {subheader}
@@ -24,7 +24,7 @@ export default function Card ({header, subheader, avatar, href, name, children})
                         <a className='link' href={href}>
                             {name}
                         </a>
-                    </h2>            
+                    </h2>
                     {children}
                 </div>
             )}
