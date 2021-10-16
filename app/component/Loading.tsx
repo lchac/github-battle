@@ -1,18 +1,7 @@
 import React from "react";
-import PropTypes from 'prop-types'
+import { ILoadingProps } from "../types/loading";
 
-const styles = {
-    content: {
-        fontSize: '35px',
-        position: 'absolute',
-        left: '0',
-        right: '0',
-        marginTop: '20px',
-        textAlign: 'center'
-    }
-}
-
-export default function Loading({ text = 'Loading', speed = 300 }) {
+export default function Loading({ text = 'Loading', speed = 300 }: ILoadingProps) {
 
     const [content, setContent] = React.useState(text)
 
@@ -28,13 +17,16 @@ export default function Loading({ text = 'Loading', speed = 300 }) {
     }, [text, speed])
 
     return (
-        <p style={styles.content}>
+        <p style={{
+            fontSize: '35px',
+            position: 'absolute',
+            left: '0',
+            right: '0',
+            marginTop: '20px',
+            textAlign: 'center'
+        }}>
             {content}
         </p>
     )
 }
 
-Loading.propTypes = {
-    text: PropTypes.string,
-    speed: PropTypes.number
-}

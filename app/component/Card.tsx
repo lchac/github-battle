@@ -1,8 +1,8 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import ThemeContext from '../contexts/theme'
+import { ICardProps } from '../types/card'
 
-export default function Card({ header, subheader, avatar, href, name, children }) {
+export default function Card({ header, subheader, avatar, href, name, children }: ICardProps) {
 
     const theme = React.useContext(ThemeContext)
 
@@ -31,11 +31,3 @@ export default function Card({ header, subheader, avatar, href, name, children }
     )
 }
 
-Card.propTypes = {
-    header: PropTypes.string.isRequired,
-    subheader: PropTypes.string,
-    avatar: PropTypes.string.isRequired,
-    href: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired
-
-}

@@ -1,13 +1,13 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import { fetchPopularRepos } from '../utils/api'
 import { FaUser, FaStar, FaCodeBranch, FaExclamationTriangle } from 'react-icons/fa'
 import Card from './Card'
 import Loading from './Loading'
 import Tooltip from './Tooltip'
+import { ILanguagesNavProps, IPopularAction, IPopularState, IReposGridProps, LanguageKeys, languages } from '../types/popular'
 
-function LanguangesNav({ selected, onUpdateLanguage }) {
-    const languages = ['All', 'JavaScript', 'Ruby', 'Java', 'CSS', 'Python'];
+function LanguagesNav({ selected, onUpdateLanguage }: ILanguagesNavProps) {
+   
     return (
         <ul className='flex-center'>
             {languages.map((language) => (
@@ -24,16 +24,11 @@ function LanguangesNav({ selected, onUpdateLanguage }) {
     )
 }
 
-LanguangesNav.propTypes = {
-    selected: PropTypes.string.isRequired,
-    onUpdateLanguage: PropTypes.func.isRequired
-}
-
-function ReposGrid({ repos }) {
+function ReposGrid({ repos } : IReposGridProps) {
     return (
         <ul className='grid space-around'>
             {repos.map((repo, index) => {
-                const { name, owner, html_url, stargazers_count, forks, open_issues } = repo
+                const { owner, html_url, stargazers_count, forks, open_issues } = repo
                 const { login, avatar_url } = owner
 
                 return (
@@ -73,11 +68,8 @@ function ReposGrid({ repos }) {
     )
 }
 
-ReposGrid.propTypes = {
-    repos: PropTypes.array.isRequired
-}
-
-function popularReducer(state, action) {
+// TODO: Correct TS errors.
+function popularReducer(state, action: IPopularAction) {
     if (action.type === 'success') {
         return {
             ...state,
@@ -87,7 +79,7 @@ function popularReducer(state, action) {
     } else if (action.type === 'error') {
         return {
             ...state,
-            error: action.error.message
+            error: action?.error?.message
         }
     } else {
         throw new Error('That action type is not supported')
@@ -96,14 +88,14 @@ function popularReducer(state, action) {
 
 export default function Popular() {
 
-    const [selectedLanguage, setSelectedLanguage] = React.useState('All')
+    const [selectedLanguage, setSelectedLanguage] = React.useState<LanguageKeys>('All')
 
     const [state, dispatch] = React.useReducer(
         popularReducer,
         { error: null }
     )
 
-    const fetchedLanguages = React.useRef([])
+    const fetchedLanguages = React.useRef<string[]>([])
 
     React.useLayoutEffect(() => {
         if (fetchedLanguages.current.includes(selectedLanguage) === false) {
@@ -111,7 +103,7 @@ export default function Popular() {
 
             fetchPopularRepos(selectedLanguage)
                 .then(repos => dispatch({ type: 'success', selectedLanguage, repos }))
-                .catch(error => dispatch({ type: 'error', error }))
+                .catch(error => dispatch({ type: 'error', error, selectedLanguage }))
         }
     }, [fetchedLanguages, selectedLanguage])
 
@@ -119,7 +111,7 @@ export default function Popular() {
 
     return (
         <React.Fragment>
-            <LanguangesNav
+            <LanguagesNav
                 selected={selectedLanguage}
                 onUpdateLanguage={setSelectedLanguage}
             />

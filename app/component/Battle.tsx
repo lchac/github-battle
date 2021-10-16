@@ -1,8 +1,9 @@
 import React from 'react'
-import { FaUserFriends, FaFighterJet, FaTrophy, FaTimesCircle, FaGrinTongueSquint } from 'react-icons/fa'
-import PropTypes from 'prop-types'
-import ThemeContext, { ThemeConsumer } from '../contexts/theme'
+import { FaUserFriends, FaFighterJet, FaTrophy, FaTimesCircle } from 'react-icons/fa'
+import ThemeContext from '../contexts/theme'
 import { Link } from 'react-router-dom'
+import { ETheme } from '../types/global'
+import { EPlayer, IPlayerInputProps, IPlayerPreviewProps } from '../types/battle'
 
 function Instructions() {
 
@@ -29,16 +30,16 @@ function Instructions() {
     )
 }
 
-function PlayerInput({ onSubmit, label }) {
+function PlayerInput({ onSubmit, label }: IPlayerInputProps) {
 
     const [username, setUsername] = React.useState('')
 
-    const handleSubmit = (event) => {
+    const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault()
         onSubmit(username)
     }
 
-    const handleChange = (event) => setUsername(event.target.value)
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => setUsername(event.target.value)
 
     const theme = React.useContext(ThemeContext)
 
@@ -58,7 +59,7 @@ function PlayerInput({ onSubmit, label }) {
                     onChange={handleChange}
                 />
                 <button
-                    className={`btn ${theme === 'light' ? 'dark-btn' : 'light-btn'}`}
+                    className={`btn ${theme === ETheme.light ? 'dark-btn' : 'light-btn'}`}
                     type='submit'
                     disabled={!username}
                 >
@@ -69,12 +70,7 @@ function PlayerInput({ onSubmit, label }) {
     )
 }
 
-PlayerInput.propTypes = {
-    onSubmit: PropTypes.func.isRequired,
-    label: PropTypes.string.isRequired
-}
-
-function PlayerPreview({ username, onReset, label }) {
+function PlayerPreview({ username, onReset, label }: IPlayerPreviewProps) {
 
     const theme = React.useContext(ThemeContext)
 
@@ -102,21 +98,15 @@ function PlayerPreview({ username, onReset, label }) {
     )
 }
 
-PlayerPreview.propTypes = {
-    username: PropTypes.string.isRequired,
-    onReset: PropTypes.func.isRequired,
-    label: PropTypes.string.isRequired
-}
-
 export default function Battle() {
-    const [playerOne, setPlayerOne] = React.useState(null)
-    const [playerTwo, setPlayerTwo] = React.useState(null)
+    const [playerOne, setPlayerOne] = React.useState<string | null>(null)
+    const [playerTwo, setPlayerTwo] = React.useState<string | null>(null)
 
-    const handleSubmit = (id, player) => id === 'playerOne'
+    const handleSubmit = (id: string, player: string) => id === EPlayer.One
         ? setPlayerOne(player)
         : setPlayerTwo(player)
 
-    const handleReset = (id) => id === 'playerOne'
+    const handleReset = (id: string) => id === EPlayer.One
         ? setPlayerOne(null)
         : setPlayerTwo(null)
 
@@ -129,23 +119,23 @@ export default function Battle() {
                     {playerOne === null
                         ? <PlayerInput
                             label='Player One'
-                            onSubmit={(player) => handleSubmit('playerOne', player)}
+                            onSubmit={(player) => handleSubmit(EPlayer.One, player)}
                         />
                         : <PlayerPreview
                             username={playerOne}
                             label='Player One'
-                            onReset={() => handleReset('playerOne')}
+                            onReset={() => handleReset(EPlayer.One)}
                         />
                     }
                     {playerTwo === null
                         ? <PlayerInput
                             label='Player Two'
-                            onSubmit={(player) => handleSubmit('playerTwo', player)}
+                            onSubmit={(player) => handleSubmit(EPlayer.Two, player)}
                         />
                         : <PlayerPreview
                             username={playerTwo}
                             label='Player Two'
-                            onReset={() => handleReset('playerTwo')}
+                            onReset={() => handleReset(EPlayer.Two)}
                         />
                     }
                 </div>

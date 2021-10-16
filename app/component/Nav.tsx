@@ -1,12 +1,14 @@
 import React from 'react';
 import ThemeContext from '../contexts/theme'
 import { NavLink } from 'react-router-dom'
+import { INavProps } from '../types/nav';
+import { ETheme } from '../types/global';
 
 const activeStyle = {
     color: 'rgb(187, 46, 31)'
 }
 
-export default function Nav({ toggleTheme }) {
+export default function Nav({ toggleTheme } : INavProps) {
 
     const theme = React.useContext(ThemeContext)
 
@@ -35,7 +37,7 @@ export default function Nav({ toggleTheme }) {
                 style={{ fontSize: 30 }}
                 className='btn-clear'
                 onClick={toggleTheme}>
-                {theme === 'light' ? '🔦' : '💡'}
+                {theme === ETheme.light ? '🔦' : '💡'}
             </button>
         </nav>
     )

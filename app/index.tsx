@@ -5,14 +5,15 @@ import { ThemeProvider } from './contexts/theme'
 import Nav from './component/Nav'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import Loading from './component/Loading'
+import { ETheme } from './types/global'
 
 const Popular = React.lazy(() => import('./component/Popular'))
 const Battle = React.lazy(() => import('./component/Battle'))
 const Results = React.lazy(() => import('./component/Results'))
 
 function App() {
-    const [theme, setTheme] = React.useState('light')
-    const toggleTheme = () => setTheme((theme) => theme === 'light' ? 'dark' : 'light')
+    const [theme, setTheme] = React.useState(ETheme.light)
+    const toggleTheme = () => setTheme((theme) => theme === ETheme.light ? ETheme.dark : ETheme.light)
 
     return (
         <Router>

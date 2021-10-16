@@ -6,7 +6,9 @@
   "scripts": {
     "start": "webpack-dev-server",
     "build": "NODE_ENV='production' webpack",
-    "build-for-windows": "SET NODE_ENV=production&& webpack"
+    "build-dev": "NODE_ENV='development' webpack",
+    "build-for-windows": "SET NODE_ENV=production&& webpack",
+    "build-dev-for-windows": "SET NODE_ENV=development&& webpack"
   },
   "babel": {
     "presets": [
@@ -39,6 +41,7 @@
     "@babel/preset-typescript": "^7.15.0",
     "@types/react": "^17.0.17",
     "@types/react-dom": "^17.0.9",
+    "@types/react-router-dom": "^5.3.0",
     "babel-loader": "^8.1.0",
     "copy-webpack-plugin": "^6.2.1",
     "css-loader": "^4.3.0",
