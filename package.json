@@ -6,12 +6,15 @@
   "scripts": {
     "start": "webpack-dev-server",
     "build": "NODE_ENV='production' webpack",
-    "build-for-windows": "SET NODE_ENV=production&& webpack"
+    "build-dev": "NODE_ENV='development' webpack",
+    "build-for-windows": "SET NODE_ENV=production&& webpack",
+    "build-dev-for-windows": "SET NODE_ENV=development&& webpack"
   },
   "babel": {
     "presets": [
       "@babel/preset-env",
-      "@babel/preset-react"
+      "@babel/preset-react",
+      "@babel/preset-typescript"
     ],
     "plugins": [
       "@babel/plugin-proposal-class-properties",
@@ -35,11 +38,16 @@
     "@babel/plugin-proposal-class-properties": "^7.10.4",
     "@babel/preset-env": "^7.11.5",
     "@babel/preset-react": "^7.10.4",
+    "@babel/preset-typescript": "^7.15.0",
+    "@types/react": "^17.0.17",
+    "@types/react-dom": "^17.0.9",
+    "@types/react-router-dom": "^5.3.0",
     "babel-loader": "^8.1.0",
     "copy-webpack-plugin": "^6.2.1",
     "css-loader": "^4.3.0",
     "html-webpack-plugin": "^4.5.0",
     "style-loader": "^1.3.0",
+    "typescript": "^4.3.5",
     "webpack": "^4.44.2",
     "webpack-cli": "^3.3.12",
     "webpack-dev-server": "^3.11.0"

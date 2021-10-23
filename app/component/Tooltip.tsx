@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types'
 import useHover from '../hooks/useHover'
+import { ITooltipProps, ITooltipStyles } from '../types/tooltip';
 
-const styles = {
+const styles: ITooltipStyles = {
     container: {
         position: 'relative',
         display: 'flex'
@@ -25,7 +26,7 @@ const styles = {
 }
 
 
-export default function Tooltip({ text, children }) {
+export default function Tooltip({ text, children } : ITooltipProps) {
     const [hovering, attrs] = useHover()
 
     return (
