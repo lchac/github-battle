@@ -1,10 +1,10 @@
 import { BasicError } from "./global";
 
-export const languages = ['All', 'JavaScript', 'Ruby', 'Java', 'CSS', 'Python']
 export type LanguageKeys = 'All' | 'JavaScript' | 'Ruby' | 'Java' | 'CSS' | 'Python'
+export const languages: LanguageKeys[] = ['All', 'JavaScript', 'Ruby', 'Java', 'CSS', 'Python']
 
 export interface ILanguagesNavProps {
-    selected: string,
+    selected: LanguageKeys,
     onUpdateLanguage: (language: LanguageKeys) => void
 }
 
@@ -22,14 +22,32 @@ export interface IRepo {
 }
 
 export interface IReposGridProps {
-    repos: IRepo[]
+    repos?: IRepo[]
 }
 
+export enum EPopularActionType {
+    success = 'success',
+    error = 'error'
+}
+
+export type PopularActionType = EPopularActionType.success | EPopularActionType.error
 export interface IPopularAction {
-    type: 'success' | 'error'
+    type: PopularActionType
     selectedLanguage: LanguageKeys
     repos?: IRepo[]
     error?: BasicError | null
 }
 
-export type IPopularState = unknown[]
+export type PopularAction = {
+    type: EPopularActionType.success
+    selectedLanguage: LanguageKeys
+    repos?: IRepo[]
+} | {
+    type: EPopularActionType.error
+    error: BasicError | null
+    selectedLanguage?: never
+}
+
+export type IPopularState = {
+    error: string | undefined | null
+} & Partial<Record<LanguageKeys, IRepo[]>>

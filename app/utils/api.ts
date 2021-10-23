@@ -1,3 +1,6 @@
+import { IRepo } from "../types/popular"
+import { IPlayer } from "../types/results"
+
 const id = 'a2a67e2d963b9c7991c2'
 const secret = '31cbac0541791d580146e4553857cf123f174487'
 const params = `?client_id=${id}&client_secret=${secret}`
@@ -34,15 +37,15 @@ function getRepos(username: string) {
         })
 }
 
-function getStarCount(repos: Array<unknown>) {
-    return repos.reduce((count, {stargazers_count}) => count + stargazers_count, 0)
+function getStarCount(repos: Array<IRepo>) {
+    return repos.reduce((count, { stargazers_count }) => count + stargazers_count, 0)
 }
 
-function calculateScore(followers: number, repos) {
+function calculateScore(followers: number, repos: IRepo[]) {
     return (followers * 3) + getStarCount(repos)
 }
 
-function getUserData(player) {
+function getUserData(player: string) {
     return Promise.all([
         getProfile(player),
         getRepos(player)
@@ -52,11 +55,11 @@ function getUserData(player) {
     }))
 }
 
-function sortPlayers(players) {
+function sortPlayers(players: IPlayer[]): IPlayer[] {
     return players.sort((a, b) => b.score - a.score)
 }
 
-export function battle(players) {
+export function battle(players: string[]) {
     return Promise.all([
         getUserData(players[0]),
         getUserData(players[1])

@@ -2,14 +2,17 @@ import React from 'react';
 import { battle } from '../utils/api'
 import { FaCompass, FaBriefcase, FaUsers, FaUserFriends, FaUser } from 'react-icons/fa'
 import Card from './Card'
-import PropTypes from 'prop-types'
 import Loading from './Loading'
 import Tooltip from './Tooltip'
 import queryString from 'query-string'
 import { Link } from 'react-router-dom'
-import { IProfileListProps, IResultsProps } from '../types/results';
+import { EResultsActionType, IProfileListProps, IResultsProps, IResultsState, ResultsAction } from '../types/results';
 
 function ProfileList({ profile }: IProfileListProps) {
+    if (profile === undefined) {
+        return <></>
+    }
+
     return (
         <ul className='card-list'>
             <li>
@@ -35,29 +38,25 @@ function ProfileList({ profile }: IProfileListProps) {
             <li>
                 <FaUsers color='rgb(129,195,245)' size={22} />
                 {profile.followers.toLocaleString()} followers
-        </li>
+            </li>
             <li>
                 <FaUserFriends color='rgb(64,183,95)' size={22} />
                 {profile.following.toLocaleString()} following
-        </li>
+            </li>
         </ul>
     )
 }
 
-ProfileList.propTypes = {
-    profile: PropTypes.object.isRequired,
-}
 
-// TODO: Correct TS errors.
-function battleReducer(state, action) {
-    if (action.type === 'success') {
+function battleReducer(state: IResultsState, action: ResultsAction): IResultsState {
+    if (action.type === EResultsActionType.success) {
         return {
             winner: action.winner,
             loser: action.loser,
             error: null,
             loading: false
         }
-    } else if (action.type === 'error') {
+    } else if (action.type === EResultsActionType.error) {
         return {
             ...state,
             error: action.message,
@@ -69,16 +68,18 @@ function battleReducer(state, action) {
 }
 
 export default function Results({ location }: IResultsProps) {
-    const { playerOne, playerTwo } = queryString.parse(location.search)
     const [state, dispatch] = React.useReducer(
-        battleReducer,
-        { winner: null, loser: null, error: null, loading: true }
-    )
+            battleReducer,
+            { winner: undefined, loser: undefined, error: null, loading: true }
+        )
+    const { playerOne, playerTwo } = queryString.parse(location.search)
 
     React.useEffect(() => {
-        battle([playerOne, playerTwo])
-            .then(players => dispatch({ type: 'success', winner: players[0], loser: players[1] }))
-            .catch(message => dispatch({ type: 'error', message }))
+        if (typeof playerOne === 'string' && typeof playerTwo === 'string') {
+            battle([playerOne, playerTwo])
+                .then(players => dispatch({ type: EResultsActionType.success, winner: players[0], loser: players[1] }))
+                .catch((message: string) => dispatch({ type: EResultsActionType.error, message }))
+        }
     }, [playerOne, playerTwo])
 
     const { winner, loser, error, loading } = state
@@ -97,20 +98,20 @@ export default function Results({ location }: IResultsProps) {
         <React.Fragment>
             <div className='grid space-around container-sm'>
                 <Card
-                    header={winner.score === loser.score ? 'Tie' : 'Winner'}
-                    subheader={`Score: ${winner.score.toLocaleString()}`}
-                    avatar={winner.profile.avatar_url}
-                    href={winner.profile.html_url}
-                    name={winner.profile.login}>
-                    <ProfileList profile={winner.profile} />
+                    header={winner?.score === loser?.score ? 'Tie' : 'Winner'}
+                    subheader={`Score: ${winner?.score.toLocaleString()}`}
+                    avatar={winner?.profile.avatar_url}
+                    href={winner?.profile.html_url}
+                    name={winner?.profile.login}>
+                    <ProfileList profile={winner?.profile} />
                 </Card>
                 <Card
-                    header={winner.score === loser.score ? 'Tie' : 'Loser'}
-                    subheader={`Score: ${loser.score.toLocaleString()}`}
-                    avatar={loser.profile.avatar_url}
-                    href={loser.profile.html_url}
-                    name={loser.profile.login}>
-                    <ProfileList profile={loser.profile} />
+                    header={winner?.score === loser?.score ? 'Tie' : 'Loser'}
+                    subheader={`Score: ${loser?.score.toLocaleString()}`}
+                    avatar={loser?.profile.avatar_url}
+                    href={loser?.profile.html_url}
+                    name={loser?.profile.login}>
+                    <ProfileList profile={loser?.profile} />
                 </Card>
             </div>
             <Link

@@ -4,22 +4,26 @@ import { FaUser, FaStar, FaCodeBranch, FaExclamationTriangle } from 'react-icons
 import Card from './Card'
 import Loading from './Loading'
 import Tooltip from './Tooltip'
-import { ILanguagesNavProps, IPopularAction, IPopularState, IReposGridProps, LanguageKeys, languages } from '../types/popular'
+import { EPopularActionType, ILanguagesNavProps, IPopularState, IReposGridProps, LanguageKeys, languages, PopularAction } from '../types/popular'
+import { BasicError } from '../types/global'
 
 function LanguagesNav({ selected, onUpdateLanguage }: ILanguagesNavProps) {
-   
+    
     return (
         <ul className='flex-center'>
-            {languages.map((language) => (
-                <li key={language}>
-                    <button className='btn-clear nav-link'
-                        onClick={() => onUpdateLanguage(language)}
-                        style={language === selected ? { color: 'rgb(187, 46, 31)' } : null}>
-                        {language}
-                    </button>
-                </li>
-
-            ))}
+            { languages.map((language) => {
+                const style: React.CSSProperties = language === selected ? { color: 'rgb(187, 46, 31)' } : {}
+                
+                return (
+                    <li key={language}>
+                        <button className='btn-clear nav-link'
+                            onClick={() => onUpdateLanguage(language)}
+                            style={style}>
+                            {language}
+                        </button>
+                    </li>)
+                })
+            }
         </ul>
     )
 }
@@ -27,7 +31,7 @@ function LanguagesNav({ selected, onUpdateLanguage }: ILanguagesNavProps) {
 function ReposGrid({ repos } : IReposGridProps) {
     return (
         <ul className='grid space-around'>
-            {repos.map((repo, index) => {
+            {repos?.map((repo, index) => {
                 const { owner, html_url, stargazers_count, forks, open_issues } = repo
                 const { login, avatar_url } = owner
 
@@ -68,15 +72,14 @@ function ReposGrid({ repos } : IReposGridProps) {
     )
 }
 
-// TODO: Correct TS errors.
-function popularReducer(state, action: IPopularAction) {
-    if (action.type === 'success') {
+function popularReducer(state: IPopularState, action: PopularAction): IPopularState {
+    if (action.type === EPopularActionType.success) {
         return {
             ...state,
             [action.selectedLanguage]: action.repos,
             error: null
         }
-    } else if (action.type === 'error') {
+    } else if (action.type === EPopularActionType.error) {
         return {
             ...state,
             error: action?.error?.message
@@ -102,8 +105,8 @@ export default function Popular() {
             fetchedLanguages.current.push(selectedLanguage)
 
             fetchPopularRepos(selectedLanguage)
-                .then(repos => dispatch({ type: 'success', selectedLanguage, repos }))
-                .catch(error => dispatch({ type: 'error', error, selectedLanguage }))
+                .then(repos => dispatch({ type: EPopularActionType.success, selectedLanguage, repos }))
+                .catch((error: BasicError) => dispatch({ type: EPopularActionType.error, error }))
         }
     }, [fetchedLanguages, selectedLanguage])
 
