@@ -64,7 +64,7 @@ function PlayerInput({ onSubmit, label }: IPlayerInputProps) {
                     disabled={!username}
                 >
                     Submit
-                        </button>
+                </button>
             </div>
         </form>
     )
